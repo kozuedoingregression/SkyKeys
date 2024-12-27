@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>SkyKeys</title>
+        <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script> 
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+                background-color: #f0f0f0;
+            }
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(5, 60px);  
+                grid-gap: 10px;
+            }
+            .block {
+                width: 60px;
+                height: 60px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: transparent;
+                border: 1px solid black;
+                border-radius: 8px;
+                position: relative;
+                cursor: pointer;
+                user-select: none;
+                touch-action: none;        
+                position: relative;
+            }
+            .block img {
+                width: 60px;
+                height: 60px;
+                pointer-events: none; /* Prevent interaction with the image */
+            }
+            .block.active {
+               
+                opacity: 0.5;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>SkyKeys</h1>
+       <div class="grid">
+            <!-- Static Blocks with Icons -->
+            <div class="block" data-letter="Y"><img src="{{ url_for('static', filename='icon3.png') }}" alt="Icon for Y"></div>
+            <div class="block" data-letter="U"><img src="{{ url_for('static', filename='icon1.png') }}" alt="Icon for U"></div>
+            <div class="block" data-letter="I"><img src="{{ url_for('static', filename='icon2.png') }}" alt="Icon for I"></div>
+            <div class="block" data-letter="O"><img src="{{ url_for('static', filename='icon1.png') }}" alt="Icon for O"></div>
+            <div class="block" data-letter="P"><img src="{{ url_for('static', filename='icon2.png') }}" alt="Icon for P"></div>
+            <div class="block" data-letter="H"><img src="{{ url_for('static', filename='icon2.png') }}" alt="Icon for H"></div>
+            <div class="block" data-letter="J"><img src="{{ url_for('static', filename='icon2.png') }}" alt="Icon for J"></div>
+            <div class="block" data-letter="K"><img src="{{ url_for('static', filename='icon3.png') }}" alt="Icon for K"></div>
+            <div class="block" data-letter="L"><img src="{{ url_for('static', filename='icon1.png') }}" alt="Icon for L"></div>
+            <div class="block" data-letter=";"><img src="{{ url_for('static', filename='icon2.png') }}" alt="Icon for ;"></div>
+            <div class="block" data-letter="N"><img src="{{ url_for('static', filename='icon2.png') }}" alt="Icon for N"></div>
+            <div class="block" data-letter="M"><img src="{{ url_for('static', filename='icon1.png') }}" alt="Icon for M"></div>
+            <div class="block" data-letter=","><img src="{{ url_for('static', filename='icon2.png') }}" alt="Icon for ,"></div>
+            <div class="block" data-letter="."><img src="{{ url_for('static', filename='icon2.png') }}" alt="Icon for ."></div>
+            <div class="block" data-letter="/"><img src="{{ url_for('static', filename='icon3.png') }}" alt="Icon for /"></div>
+        </div>        <script>
+            const socket = io();  
+            const blocks = document.querySelectorAll('.block');
+
+            blocks.forEach(block => {
+                block.addEventListener('touchstart', (event) => {
+                    block.classList.add('active');  
+                    const letter = block.dataset.letter;
+                    console.log(`Touch start: ${letter}`);
+                    
+                    socket.emit('keypress', { keys: [letter] });
+
+                    setTimeout(() => block.classList.remove('active'), 200);
+                });
+            });
+        </script>
+    </body>
+    <footer style="padding-top:20px;">
+        SkyKeys | Developed By <a style=" color: black; text-decoration:none;" href="https://x.com/0xaa248">kozue</a>
+        | Give a Star on <a style=" color: black; text-decoration:none;" href="https://github.com/kozuedoingregression">GitHub</a> :)
+    </footer>
+</html>
